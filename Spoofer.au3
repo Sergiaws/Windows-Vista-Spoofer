@@ -1,14 +1,3 @@
-#cs ----------------------------------------------------------------------------
-
- AutoIt Version: 3.3.16.0
- Author:         Sergiaws
-
- Script Function:
-	Template AutoIt script.
-
-#ce ----------------------------------------------------------------------------
-
-; Script Start - Add your code below here
 #include <GUIConstantsEx.au3>
 #include <MsgBoxConstants.au3>
 $appname=""
@@ -49,8 +38,7 @@ GUIDelete($hGUI)
 
 
 Func OsWriter($appname, $osname)
-	
-Local $DefaultBuildNumber=""
+	Local $DefaultBuildNumber=""
 	Local $ServicePack=""
 	Local $MajorVersion=""
 	Local $MinorVersion=""
@@ -103,7 +91,7 @@ Local $DefaultBuildNumber=""
 		$MinorVersion="0"
 		$Extra="Win10SuperVerFix=1"
 		ElseIf $osname=	"Windows11" then
-		$DefaultBuildNumber="22000"
+		$DefaultBuildNumber="26100"
 		$ServicePack=""
 		$MajorVersion="10"
 		$MinorVersion="0"
@@ -127,9 +115,14 @@ Local $DefaultBuildNumber=""
 	Case $ChangeBuild=7
 		$BuildNumber=$DefaultBuildNumber
 	EndSelect
-	msgbox(4096, "", "Your Build Number is "&$BuildNumber&". Writing changes to osver.ini")
+	;Let's ask if the person want to enable spoofing or not
+	Local $enable=msgbox(36, "Attention", "Do you want to enable it? If no, you might need to add later the line Enabled=1 to osver.ini")
+
 	$OsverFile=FileOpen(@ScriptDir & "\osver.ini", 1)
 	FileWrite($OsverFile, @CRLF & "[" & $appname & "]" & @CRLF)
+	if $enable=6 Then
+		FileWrite($OsverFile, "Enabled=1" & @CRLF)
+	EndIf
 	FileWrite($OsverFile, "MajorVersion=" & $MajorVersion & @CRLF)
 	FileWrite($OsverFile, "MinorVersion=" & $MinorVersion & @CRLF)
 	FileWrite($OsverFile, "BuildNumber=" & $BuildNumber & @CRLF)
